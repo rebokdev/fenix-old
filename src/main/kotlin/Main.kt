@@ -1,6 +1,6 @@
 import kotlin.reflect.KFunction
 
-val Options = mapOf<String,Option>("help" to Option(::help,"Shows help", listOf("hello"), listOf()),"about" to Option(::about,"Shows about message",
+val Options = mapOf<String,Option>("help" to Option(::help,"Shows help", listOf(), listOf()),"about" to Option(::about,"Shows about message",
     listOf(), listOf()))
 var Usage: String = ""
 var index: Int = 0
@@ -60,7 +60,7 @@ data class Option(val func: KFunction<Unit>,val description: String,val arg_type
 fun IntegrityCheck(vararg Options: Option) {
     for (it in Options) {
         if (it.arg_types.size != it.arg_names.size) {
-            throw Exception("Option data is not completed. More info: at ${it.func} Cause: ${it.arg_names} is not equals to ${it.arg_types} ")
+            throw Exception("Option data is not completed.")
         }
     }
 
