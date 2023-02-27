@@ -1,23 +1,20 @@
-val available = mapOf("help" to ::help,"about" to ::about)
-val help_descriptions = mapOf<String,String>("help" to "shows this information","about" to "Shows details about Fenix")
-val help_examples = mapOf<String,String>("help" to "fenix help","about" to "fenix about")
-val args_counts = mapOf<String,Int>("help" to 0,"about" to 0)
-val arg_types = mapOf<String,List<String>>("help" to listOf<String>(),"about" to listOf<String>())
+import kotlin.reflect.KFunction
 
+val Options = mapOf<String,Option>("help" to Option(::help,"Shows help", listOf("hello"), listOf()),"about" to Option(::about,"Shows about message",
+    listOf(), listOf()))
+var Usage: String = ""
+var index: Int = 0
 fun main(args: Array<String>) {
-    if (available.size == help_descriptions.size && help_descriptions.size == help_examples.size) {
+    IntegrityCheck(*Options.values.toTypedArray())
         if (args.isNotEmpty()) {
-            if (available.containsKey(args[0])) {
-                available[args[0]]?.invoke()
+            if (Options.containsKey(args[0])) {
+                Options[args[0]]?.func?.call()
             } else {
                 println("There's no such an option")
             }
         } else {
             println("No option provided")
         }
-    } else {
-        println("Not enough option info")
-    }
 
 }
 
@@ -29,10 +26,24 @@ fun about() {
 
 fun help() {
     println("HELP")
-    for (it in available.keys) {
+    for (it in Options.keys) {
         println()
-        println("   ${it}: ${help_descriptions[it]}")
-        println("      usage: ${help_examples[it]}")
+        if (it == "help") {
+            println("   ${it}: Shows this help message")
+        } else {
+            println("   ${it}: ${Options[it]?.description}")
+        }
+
+        Usage = "    Usage: ${it} "
+        Options[it]?.arg_names?.let { it1 ->
+            repeat(it1.size) {
+                Usage = "[${it1[index]}]"
+                index++
+
+            }
+        }
+        index = 0
+        println(Usage)
     }
 }
 
@@ -42,5 +53,16 @@ fun install() {
 
 fun remove() {
     TODO()
+}
+
+data class Option(val func: KFunction<Unit>,val description: String,val arg_types: List<String>,val arg_names: List<String>)
+
+fun IntegrityCheck(vararg Options: Option) {
+    for (it in Options) {
+        if (it.arg_types.size != it.arg_names.size) {
+            throw Exception("Option data is not completed. More info: at ${it.func} Cause: ${it.arg_names} is not equals to ${it.arg_types} ")
+        }
+    }
+
 }
 
