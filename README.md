@@ -1,5 +1,7 @@
 # fenix
 fast package menager
 
-   
-main branch will not be used till fenix will support some standard features
+ version numbers:
+   main: X.0
+   beta: X.X.0
+   alpha: X.X.X
