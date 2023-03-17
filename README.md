@@ -2,4 +2,8 @@
 fast package manager
 
    
-main branch will not be used till fenix will support some standard features
+version numbers:
+   stable: x
+   beta: x.x
+   alpha: x.x.x
+   
