@@ -24,7 +24,7 @@ fun main(args: Array<String>) {
 fun about(Parameters: ParameterPack) {
     println("FENIX - Package manager built to be fast")
     println()
-    println("version: 0.0.2")
+    println("version: 0.1")
 }
 
 
